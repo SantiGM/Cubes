@@ -10,7 +10,7 @@ class Colors:
     yellow = (255,255,0)
     orange = (255,102,0)    
 
-WIDTH = 500
+WIDTH = 1000
 HEIGHT = 600
 
 DEG_TO_RAD_30 = 30*math.pi/180
@@ -85,32 +85,29 @@ class Cube:
 
         pygame.display.flip()
 
-def Create_Cube_grid(x,y,length,num_cubes,grid_width,grid_length,grid_height,color_L,color_R,color_U):
+def Create_Cube_grid(x, y, length, grid_length, grid_width, grid_height, color_L, color_R, color_U):
 
-    cube_list = []
+    cube_array = []
 
-    for i in range(num_cubes):
-        cube_list.append(Cube(0,0,length,color_L,color_R,color_U))
+    for h in range(grid_height):
+        cube_array.append([])
+        for w in range(grid_width):
+            cube_array[h].append([])
+            for l in range(grid_length):
+                cube_array[h][w].append(Cube(x + (length*math.cos(DEG_TO_RAD_30))*l + (length*math.cos(DEG_TO_RAD_30))*w, y + (length*math.sin(DEG_TO_RAD_30))*l - (length*math.sin(DEG_TO_RAD_30))*w - length*h, length, color_L, color_R, color_U))
+                cube_array[h][w][l].update_points()
 
-    for i in range(grid_length):
-        cube_list[i].x = x + (length*math.cos(DEG_TO_RAD_30))*i
-        cube_list[i].y = y + (length*math.sin(DEG_TO_RAD_30))*i
-        cube_list[i].update_points()
+    return cube_array
 
-    for i in range(1,grid_width):
-        for j in range(grid_length):
-            cube_list[j+grid_length*i].x = cube_list[j].x + (abs(cube_list[j].point3[0] - cube_list[j].point6[0]))*i
-            cube_list[j+grid_length*i].y = cube_list[j].y - (abs(cube_list[j].point3[1] - cube_list[j].point6[1]))*i
-            cube_list[j+grid_length*i].update_points()
+def Print_Cube_Array(height, width, length):
 
-    for i in range(1,grid_height):
-        for j in range(grid_length*grid_width):
-            cube_list[j+(grid_width*grid_length*i)].x = cube_list[j].x
-            cube_list[j+(grid_width*grid_length*i)].y = cube_list[j].y - cube_list[j].len*i
-            cube_list[j+(grid_width*grid_length*i)].update_points()
+    for h in range(height):
+        for w in range(width):
+            for l in range(length):
+                cubes[h][width-1-w][l].draw(gameDisplay)
 
-    return cube_list
-             
+    pass
+
 pygame.init()
 
 gameDisplay = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -120,38 +117,13 @@ clock = pygame.time.Clock()
 
 crashed = False
 
-Cubo1 = Cube(200,HEIGHT-100,50,Colors.red,Colors.blue,Colors.yellow)
+height = 3
+width = 3
+length = 3
 
-Cubo2 = Cube(Cubo1.x,Cubo1.y-Cubo1.len,Cubo1.len,Colors.red,Colors.blue,Colors.yellow)
+cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.red, Colors.green, Colors.yellow)
 
-Cubo3 = Cube(Cubo1.x,Cubo1.y-2*Cubo1.len,Cubo1.len,Colors.red,Colors.blue,Colors.yellow)
-
-Cubo4 = Cube(Cubo1.x+Cubo1.len*math.cos(DEG_TO_RAD_30),Cubo1.y+(Cubo1.len/2),Cubo1.len,Colors.red,Colors.blue,Colors.yellow)
-
-Cubo5 = Cube(Cubo1.x+2*Cubo1.len*math.cos(DEG_TO_RAD_30),Cubo1.y+Cubo1.len,Cubo1.len,Colors.red,Colors.blue,Colors.yellow)
-
-Cubo6 = Cube(Cubo1.x+Cubo1.len*math.cos(DEG_TO_RAD_30),Cubo1.y-(Cubo1.len/2),Cubo1.len,Colors.red,Colors.blue,Colors.yellow)
-
-
-#Cubo1.draw(gameDisplay)
-#Cubo2.draw(gameDisplay)
-#Cubo3.draw(gameDisplay)
-#Cubo4.draw(gameDisplay)
-#Cubo5.draw(gameDisplay)
-#Cubo6.draw(gameDisplay)
-
-cube_list = Create_Cube_grid(150,HEIGHT-100,50,63,3,3,7,Colors.red,Colors.green,Colors.yellow)
-
-for i in range(7):
-    cube_list[6+9*i].draw(gameDisplay)
-    cube_list[3+9*i].draw(gameDisplay)
-    cube_list[7+9*i].draw(gameDisplay)
-    cube_list[0+9*i].draw(gameDisplay)
-    cube_list[4+9*i].draw(gameDisplay)
-    cube_list[8+9*i].draw(gameDisplay)
-    cube_list[1+9*i].draw(gameDisplay)
-    cube_list[5+9*i].draw(gameDisplay)
-    cube_list[2+9*i].draw(gameDisplay)
+Print_Cube_Array(height, width, length)
 
 while not crashed:
 
