@@ -8,7 +8,8 @@ class Colors:
     blue = (0,0,255)
     green = (0,255,0)
     yellow = (255,255,0)
-    orange = (255,102,0)    
+    orange = (255,102,0)
+    grey = (220,220,220)
 
 WIDTH = 1000
 HEIGHT = 600
@@ -57,31 +58,31 @@ class Cube:
 
 
         #center vertical
-        pygame.draw.line(screen, (255,255,255), self.point3, self.point4,3)
+        pygame.draw.line(screen, Colors.grey, self.point3, self.point4,3)
 
         #center to right top
-        pygame.draw.line(screen, (255,255,255), self.point4,self.point7,3)
+        pygame.draw.line(screen, Colors.grey, self.point4,self.point7,3)
 
         #right vertical
-        pygame.draw.line(screen, (255,255,255), self.point7, self.point6,3)
+        pygame.draw.line(screen, Colors.grey, self.point7, self.point6,3)
 
         #center to right bottom
-        pygame.draw.line(screen, (255,255,255), self.point3,self.point6,3)
+        pygame.draw.line(screen, Colors.grey, self.point3,self.point6,3)
 
         #center to left bottom
-        pygame.draw.line(screen, (255,255,255), self.point3,self.point1,3)
+        pygame.draw.line(screen, Colors.grey, self.point3,self.point1,3)
 
         #center to left top
-        pygame.draw.line(screen, (255,255,255), self.point4,self.point2,3)
+        pygame.draw.line(screen, Colors.grey, self.point4,self.point2,3)
 
         #left vertical
-        pygame.draw.line(screen, (255,255,255), self.point1, self.point2,3)
+        pygame.draw.line(screen, Colors.grey, self.point1, self.point2,3)
 
         #left to center
-        pygame.draw.line(screen, (255,255,255), self.point2, self.point5,3)
+        pygame.draw.line(screen, Colors.grey, self.point2, self.point5,3)
 
         #right to center
-        pygame.draw.line(screen, (255,255,255), self.point5,self.point7,3)
+        pygame.draw.line(screen, Colors.grey, self.point5,self.point7,3)
 
         pygame.display.flip()
 
@@ -121,7 +122,7 @@ height = 3
 width = 3
 length = 3
 
-cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.red, Colors.green, Colors.yellow)
+cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.blue, Colors.orange, Colors.white)
 
 Print_Cube_Array(height, width, length)
 
