@@ -11,6 +11,14 @@ class Colors:
     orange = (255,102,0)
     grey = (220,220,220)
 
+class Mouse:
+
+    def __init__(self):
+        self.prev_X = 0
+        self.prev_Y = 0
+        self.new_X = 0
+        self.new_Y = 0
+
 WIDTH = 1000
 HEIGHT = 600
 
@@ -100,12 +108,89 @@ def Create_Cube_grid(x, y, length, grid_length, grid_width, grid_height, color_L
 
     return cube_array
 
-def Print_Cube_Array(height, width, length):
+def Print_Cube_Array(cube_array, height, width, length):
 
     for h in range(height):
         for w in range(width):
             for l in range(length):
-                cubes[h][width-1-w][l].draw(gameDisplay)
+                cube_array[h][width-1-w][l].draw(gameDisplay)
+
+    pass
+
+def Handle_Mouse(Player_Mouse, cube_array):
+
+    # U
+    if((Player_Mouse.new_X + 50) < Player_Mouse.prev_X):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("U")
+
+    # U'
+    if(Player_Mouse.new_X > (Player_Mouse.prev_X + 50)):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("U'")
+
+    # F
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 50)):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("F")
+
+    # F'
+    if((Player_Mouse.new_Y - 50) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("F'")
+
+    # L
+    if((Player_Mouse.new_Y - 50) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("L")
+
+    # L'
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 50)):
+        if((Player_Mouse.prev_X > cube_array[-1][0][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][0][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][-1].point4[1])):
+                print("L'")
+
+
+    # R
+    if((Player_Mouse.new_Y - 50) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][-1][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][-1][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][-1][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][-1][-1].point4[1])):
+                print("R")
+
+    # R'
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 50)):
+        if((Player_Mouse.prev_X > cube_array[-1][-1][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][-1][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][-1][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][-1][-1].point4[1])):
+                print("R'")
+
+    # B
+    if((Player_Mouse.new_Y - 50) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][0][0].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][0].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][0].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][0].point4[1])):
+                print("B")
+
+    # B'
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 50)):
+        if((Player_Mouse.prev_X > cube_array[-1][0][0].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][0].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][0].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][0].point4[1])):
+                print("B'")
+
+    # D
+    if(Player_Mouse.new_X > (Player_Mouse.prev_X + 50)):
+        if((Player_Mouse.prev_X > cube_array[0][0][-1].point1[0]) and (Player_Mouse.prev_X < cube_array[0][0][-1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[0][0][-1].point1[1]) and (Player_Mouse.prev_Y > cube_array[0][0][-1].point4[1])):
+                print("D")
+
+    # D'
+    if((Player_Mouse.new_X + 50) < Player_Mouse.prev_X):
+        if((Player_Mouse.prev_X > cube_array[0][0][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[0][0][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[0][0][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[0][0][-1].point4[1])):
+                print("D'")
 
     pass
 
@@ -124,13 +209,24 @@ length = 3
 
 cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.blue, Colors.orange, Colors.white)
 
-Print_Cube_Array(height, width, length)
+Print_Cube_Array(cubes, height, width, length)
+
+Player_Mouse = Mouse()
 
 while not crashed:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            Player_Mouse.prev_X = pygame.mouse.get_pos()[0]
+            Player_Mouse.prev_Y = pygame.mouse.get_pos()[1]
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            Player_Mouse.new_X = pygame.mouse.get_pos()[0]
+            Player_Mouse.new_Y = pygame.mouse.get_pos()[1]
+            Handle_Mouse(Player_Mouse, cubes)
 
     pygame.display.update()
     clock.tick(30)
