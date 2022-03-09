@@ -1,5 +1,7 @@
 import pygame
 import math
+import time
+import solver
 
 class Colors:
     white = (255,255,255)
@@ -24,6 +26,12 @@ class Moves:
     Lp = 9
     R = 10
     Rp = 11
+    M_RL = 12 # hacia abajo
+    M_RLp = 13 # hacia arriba
+    M_FB = 14 # hacia derecha
+    M_FBp = 15 #hacia izquierda
+    M_UD = 16 # hacia derecha
+    M_UDp = 17 # hacia izquierda
 
 class Mouse:
 
@@ -270,6 +278,70 @@ def Move_Cubes(cube_array, move):
         cube_array[-1][-1][0].color_R, cube_array[-1][-1][-1].color_R, cube_array[0][-1][-1].color_R, cube_array[0][-1][0].color_R, cube_array[1][-1][0].color_R, cube_array[-1][-1][1].color_R, \
         cube_array[1][-1][-1].color_R, cube_array[0][-1][1].color_R
 
+    elif(move == Moves.M_RL):
+        
+        cube_array[-1][1][1].color_U, cube_array[1][1][-1].color_F, cube_array[0][1][1].color_D, cube_array[1][1][0].color_B, cube_array[-1][1][-1].color_U, cube_array[0][1][-1].color_F, \
+        cube_array[0][1][0].color_D, cube_array[-1][1][0].color_B, cube_array[-1][1][-1].color_F, cube_array[0][1][-1].color_D, cube_array[0][1][0].color_B, cube_array[-1][1][0].color_U, \
+        cube_array[-1][1][-1].color_L, cube_array[0][1][-1].color_L, cube_array[0][1][0].color_L, cube_array[-1][1][0].color_L, cube_array[-1][1][1].color_L, cube_array[1][1][-1].color_L, \
+        cube_array[0][1][1].color_L, cube_array[1][1][0].color_L = \
+        cube_array[1][1][0].color_B, cube_array[-1][1][1].color_U, cube_array[1][1][-1].color_F, cube_array[0][1][1].color_D, cube_array[-1][1][0].color_B, cube_array[-1][1][-1].color_U, \
+        cube_array[0][1][-1].color_F, cube_array[0][1][0].color_D, cube_array[-1][1][0].color_U, cube_array[-1][1][-1].color_F, cube_array[0][1][-1].color_D, cube_array[0][1][0].color_B, \
+        cube_array[-1][1][0].color_L, cube_array[-1][1][-1].color_L, cube_array[0][1][-1].color_L, cube_array[0][1][0].color_L, cube_array[1][1][0].color_L, cube_array[-1][1][1].color_L, \
+        cube_array[1][1][-1].color_L, cube_array[0][1][1].color_L
+
+    elif(move == Moves.M_RLp):
+        cube_array[1][1][0].color_B, cube_array[-1][1][1].color_U, cube_array[1][1][-1].color_F, cube_array[0][1][1].color_D, cube_array[-1][1][0].color_B, cube_array[-1][1][-1].color_U, \
+        cube_array[0][1][-1].color_F, cube_array[0][1][0].color_D, cube_array[-1][1][0].color_U, cube_array[-1][1][-1].color_F, cube_array[0][1][-1].color_D, cube_array[0][1][0].color_B, \
+        cube_array[-1][1][0].color_L, cube_array[-1][1][-1].color_L, cube_array[0][1][-1].color_L, cube_array[0][1][0].color_L, cube_array[1][1][0].color_L, cube_array[-1][1][1].color_L, \
+        cube_array[1][1][-1].color_L, cube_array[0][1][1].color_L = \
+        cube_array[-1][1][1].color_U, cube_array[1][1][-1].color_F, cube_array[0][1][1].color_D, cube_array[1][1][0].color_B, cube_array[-1][1][-1].color_U, cube_array[0][1][-1].color_F, \
+        cube_array[0][1][0].color_D, cube_array[-1][1][0].color_B, cube_array[-1][1][-1].color_F, cube_array[0][1][-1].color_D, cube_array[0][1][0].color_B, cube_array[-1][1][0].color_U, \
+        cube_array[-1][1][-1].color_L, cube_array[0][1][-1].color_L, cube_array[0][1][0].color_L, cube_array[-1][1][0].color_L, cube_array[-1][1][1].color_L, cube_array[1][1][-1].color_L, \
+        cube_array[0][1][1].color_L, cube_array[1][1][0].color_L
+
+    elif(move == Moves.M_FB):
+        
+        cube_array[-1][1][1].color_U, cube_array[1][-1][1].color_R, cube_array[0][1][1].color_D, cube_array[1][0][1].color_L, cube_array[-1][1][1].color_F, cube_array[1][-1][1].color_F, \
+        cube_array[0][1][1].color_F, cube_array[1][0][1].color_F, cube_array[-1][0][1].color_U, cube_array[-1][-1][1].color_R, cube_array[0][-1][1].color_D, cube_array[0][0][1].color_L, \
+        cube_array[-1][0][1].color_L, cube_array[-1][-1][1].color_U, cube_array[0][-1][1].color_R, cube_array[0][0][1].color_D, cube_array[-1][0][1].color_F, cube_array[-1][-1][1].color_F, \
+        cube_array[0][-1][1].color_F, cube_array[0][0][1].color_F = \
+        cube_array[1][0][1].color_L, cube_array[-1][1][1].color_U, cube_array[1][-1][1].color_R, cube_array[0][1][1].color_D, cube_array[1][0][1].color_F, cube_array[-1][1][1].color_F, \
+        cube_array[1][-1][1].color_F, cube_array[0][1][1].color_F, cube_array[0][0][1].color_L, cube_array[-1][0][1].color_U, cube_array[-1][-1][1].color_R, cube_array[0][-1][1].color_D, \
+        cube_array[0][0][1].color_D, cube_array[-1][0][1].color_L, cube_array[-1][-1][1].color_U, cube_array[0][-1][1].color_R, cube_array[0][0][1].color_F, cube_array[-1][0][1].color_F, \
+        cube_array[-1][-1][1].color_F, cube_array[0][-1][1].color_F
+
+    elif(move == Moves.M_FBp):
+        cube_array[1][0][1].color_L, cube_array[-1][1][1].color_U, cube_array[1][-1][1].color_R, cube_array[0][1][1].color_D, cube_array[1][0][1].color_F, cube_array[-1][1][1].color_F, \
+        cube_array[1][-1][1].color_F, cube_array[0][1][1].color_F, cube_array[0][0][1].color_L, cube_array[-1][0][1].color_U, cube_array[-1][-1][1].color_R, cube_array[0][-1][1].color_D, \
+        cube_array[0][0][1].color_D, cube_array[-1][0][1].color_L, cube_array[-1][-1][1].color_U, cube_array[0][-1][1].color_R, cube_array[0][0][1].color_F, cube_array[-1][0][1].color_F, \
+        cube_array[-1][-1][1].color_F, cube_array[0][-1][1].color_F = \
+        cube_array[-1][1][1].color_U, cube_array[1][-1][1].color_R, cube_array[0][1][1].color_D, cube_array[1][0][1].color_L, cube_array[-1][1][1].color_F, cube_array[1][-1][1].color_F, \
+        cube_array[0][1][1].color_F, cube_array[1][0][1].color_F, cube_array[-1][0][1].color_U, cube_array[-1][-1][1].color_R, cube_array[0][-1][1].color_D, cube_array[0][0][1].color_L, \
+        cube_array[-1][0][1].color_L, cube_array[-1][-1][1].color_U, cube_array[0][-1][1].color_R, cube_array[0][0][1].color_D, cube_array[-1][0][1].color_F, cube_array[-1][-1][1].color_F, \
+        cube_array[0][-1][1].color_F, cube_array[0][0][1].color_F
+
+    elif(move == Moves.M_UD):
+        
+        cube_array[1][1][-1].color_F, cube_array[1][-1][1].color_R, cube_array[1][1][0].color_B, cube_array[1][0][1].color_L, cube_array[1][0][-1].color_F, cube_array[1][0][-1].color_L, \
+        cube_array[1][-1][-1].color_F, cube_array[1][-1][-1].color_R, cube_array[1][-1][0].color_R, cube_array[1][-1][0].color_B, cube_array[1][0][0].color_B, cube_array[1][0][0].color_L, \
+        cube_array[1][0][-1].color_D, cube_array[1][-1][-1].color_D, cube_array[1][-1][0].color_D, cube_array[1][0][0].color_D, cube_array[1][1][-1].color_D, cube_array[1][-1][1].color_D, \
+        cube_array[1][1][0].color_D, cube_array[1][0][1].color_D = \
+        cube_array[1][0][1].color_L, cube_array[1][1][-1].color_F, cube_array[1][-1][1].color_R, cube_array[1][1][0].color_B, cube_array[1][0][0].color_L, cube_array[1][0][0].color_B, \
+        cube_array[1][0][-1].color_L, cube_array[1][0][-1].color_F, cube_array[1][-1][-1].color_F, cube_array[1][-1][-1].color_R, cube_array[1][-1][0].color_R, cube_array[1][-1][0].color_B, \
+        cube_array[1][0][0].color_D, cube_array[1][0][-1].color_D, cube_array[1][-1][-1].color_D, cube_array[1][-1][0].color_D, cube_array[1][0][1].color_D, cube_array[1][1][-1].color_D, \
+        cube_array[1][-1][1].color_D, cube_array[1][1][0].color_D
+
+    elif(move == Moves.M_UDp):
+
+        cube_array[1][0][1].color_L, cube_array[1][1][-1].color_F, cube_array[1][-1][1].color_R, cube_array[1][1][0].color_B, cube_array[1][0][0].color_L, cube_array[1][0][0].color_B, \
+        cube_array[1][0][-1].color_L, cube_array[1][0][-1].color_F, cube_array[1][-1][-1].color_F, cube_array[1][-1][-1].color_R, cube_array[1][-1][0].color_R, cube_array[1][-1][0].color_B, \
+        cube_array[1][0][0].color_D, cube_array[1][0][-1].color_D, cube_array[1][-1][-1].color_D, cube_array[1][-1][0].color_D, cube_array[1][0][1].color_D, cube_array[1][1][-1].color_D, \
+        cube_array[1][-1][1].color_D, cube_array[1][1][0].color_D = \
+        cube_array[1][1][-1].color_F, cube_array[1][-1][1].color_R, cube_array[1][1][0].color_B, cube_array[1][0][1].color_L, cube_array[1][0][-1].color_F, cube_array[1][0][-1].color_L, \
+        cube_array[1][-1][-1].color_F, cube_array[1][-1][-1].color_R, cube_array[1][-1][0].color_R, cube_array[1][-1][0].color_B, cube_array[1][0][0].color_B, cube_array[1][0][0].color_L, \
+        cube_array[1][0][-1].color_D, cube_array[1][-1][-1].color_D, cube_array[1][-1][0].color_D, cube_array[1][0][0].color_D, cube_array[1][1][-1].color_D, cube_array[1][-1][1].color_D, \
+        cube_array[1][1][0].color_D, cube_array[1][0][1].color_D
+
 def Handle_Mouse(Player_Mouse, cube_array):
 
     global change
@@ -371,6 +443,54 @@ def Handle_Mouse(Player_Mouse, cube_array):
                 Move_Cubes(cube_array, Moves.Dp)
                 change = 1
 
+    # M_RL
+    if((Player_Mouse.new_Y - 25) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][1][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][1][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][1][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][1][-1].point4[1])):
+                print("M_RL")
+                Move_Cubes(cube_array, Moves.M_RL)
+                change = 1
+
+    # M_RL'
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 25)):
+        if((Player_Mouse.prev_X > cube_array[-1][1][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[-1][1][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][1][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[-1][1][-1].point4[1])):
+                print("M_RL'")
+                Move_Cubes(cube_array, Moves.M_RLp)
+                change = 1
+
+    # M_FB
+    if(Player_Mouse.new_Y < (Player_Mouse.prev_Y - 25)):
+        if((Player_Mouse.prev_X > cube_array[-1][0][1].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][1].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][1].point4[1])):
+                print("M_FB")
+                Move_Cubes(cube_array, Moves.M_FB)
+                change = 1
+
+    # M_FB'
+    if((Player_Mouse.new_Y - 25) > Player_Mouse.prev_Y):
+        if((Player_Mouse.prev_X > cube_array[-1][0][1].point1[0]) and (Player_Mouse.prev_X < cube_array[-1][0][1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[-1][0][1].point1[1]) and (Player_Mouse.prev_Y > cube_array[-1][0][1].point4[1])):
+                print("M_FB'")
+                Move_Cubes(cube_array, Moves.M_FBp)
+                change = 1
+
+    # M_UD
+    if(Player_Mouse.new_X > (Player_Mouse.prev_X + 25)):
+        if((Player_Mouse.prev_X > cube_array[1][0][-1].point1[0]) and (Player_Mouse.prev_X < cube_array[1][0][-1].point3[0])):
+            if((Player_Mouse.prev_Y < cube_array[1][0][-1].point1[1]) and (Player_Mouse.prev_Y > cube_array[1][0][-1].point4[1])):
+                print("M_UD")
+                Move_Cubes(cube_array, Moves.M_UD)
+                change = 1
+
+    # M_UD'
+    if((Player_Mouse.new_X + 25) < Player_Mouse.prev_X):
+        if((Player_Mouse.prev_X > cube_array[1][0][-1].point3[0]) and (Player_Mouse.prev_X < cube_array[1][0][-1].point6[0])):
+            if((Player_Mouse.prev_Y < cube_array[1][0][-1].point6[1]) and (Player_Mouse.prev_Y > cube_array[1][0][-1].point4[1])):
+                print("M_UD'")
+                Move_Cubes(cube_array, Moves.M_UDp)
+                change = 1
+
     pass
 
 pygame.init()
@@ -386,11 +506,30 @@ height = 3
 width = 3
 length = 3
 
-cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.blue, Colors.orange, Colors.white, Colors.green, Colors.red, Colors.yellow)
+cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.orange, Colors.green, Colors.white, Colors.red, Colors.blue, Colors.yellow)
 
 Print_Cube_Array(cubes, height, width, length)
 
 Player_Mouse = Mouse()
+
+scrambling_moves = [Moves.Dp, Moves.F, Moves.F, Moves.Lp, Moves.U,Moves.Rp, Moves.F, Moves.F, Moves.L, Moves.Bp, Moves.R, Moves.R, Moves.D, Moves.D, Moves.R, Moves.R, Moves.Bp, Moves.L, Moves.D, Moves.D, Moves.B, Moves.B, Moves.Dp, Moves.F, Moves.F, Moves.R, Moves.R, Moves.Fp, Moves.D, Moves.B, Moves.Rp, Moves.Lp, Moves.U, Moves.U, Moves.F]
+#scrambling_moves = [Moves.Rp, Moves.U, Moves.U, Moves.B, Moves.Lp, Moves.Bp, Moves.U, Moves.U, Moves.L, Moves.L, Moves.U, Moves.D, Moves.Rp, Moves.B, Moves.D, Moves.D, Moves.U, Moves.U, Moves.Rp, Moves.Bp, Moves.U, Moves.U, Moves.L, Moves.L, Moves.B, Moves.B, Moves.Rp, Moves.L, Moves.Bp, Moves.F, Moves.F, Moves.L, Moves.L, Moves.R, Moves.B, Moves.B]
+
+for i in range(len(scrambling_moves)):
+    Move_Cubes(cubes, scrambling_moves[i])
+    Print_Cube_Array(cubes, height, width, length)
+    time.sleep(0.1)
+
+solve_chain = solver.GetSolveChain(cubes)
+
+time.sleep(2)
+
+for i in range(len(solve_chain)):
+    Move_Cubes(cubes, solve_chain[i])
+    Print_Cube_Array(cubes, height, width, length)
+    time.sleep(0.05)
+
+print("solved")
 
 while not crashed:
 
