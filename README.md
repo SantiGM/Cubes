@@ -1,0 +1,1 @@
+This is a python implementation of a 2D Rubik's cube, viewed in an isometric plane. It is possible to move every face manually, as you would with a normal cube, or by creating a random scramble. The solver module is an implementation of the Old Pochmann method.
