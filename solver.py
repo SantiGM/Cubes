@@ -633,6 +633,14 @@ def GetCornerLetterChain(Cube):
 
     return CornerSolvingChain
 
+def ReInit():
+
+    for letter in Letters:
+        EdgesDone[letter] = 0
+        CornersDone[letter] = 0
+
+    pass
+
 def GetSolveChain(Cube):
 
     SolveChain = []
@@ -676,5 +684,7 @@ def GetSolveChain(Cube):
                 SolveChain.append(CornerReverseSetupMoves[CornerChain[i]][l])
 
     print("Total Moves of Solution: ", len(SolveChain))
+
+    ReInit()
 
     return SolveChain

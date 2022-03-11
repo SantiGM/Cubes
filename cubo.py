@@ -2,6 +2,7 @@ import pygame
 import math
 import time
 import solver
+import random
 
 class Colors:
     white = (255,255,255)
@@ -45,8 +46,6 @@ WIDTH = 1000
 HEIGHT = 600
 
 DEG_TO_RAD_30 = 30*math.pi/180
-
-change = 0
 
 class Cube:
 
@@ -493,6 +492,56 @@ def Handle_Mouse(Player_Mouse, cube_array):
 
     pass
 
+def Create_Random_Scramble(Cube):
+
+    random_list = []
+
+    print("Scrambling...")
+
+    for i in range(50):
+        random_list.append(random.randint(0, 11))
+
+    for i in range(len(random_list)):
+        Move_Cubes(Cube, random_list[i])
+        Print_Cube_Array(Cube, len(Cube), len(Cube[0]), len(Cube[0][0]))
+        time.sleep(0.1)
+
+    pass
+
+def Solve_Cube(Cube):
+
+    print("Solving...")
+
+    solve_chain = solver.GetSolveChain(Cube)
+
+    for i in range(len(solve_chain)):
+        Move_Cubes(Cube, solve_chain[i])
+        Print_Cube_Array(Cube, len(Cube), len(Cube[0]), len(Cube[0][0]))
+        time.sleep(0.05)
+
+    print("Solved")
+
+    pass
+
+def Display_Menu(screen):
+
+    font = pygame.font.Font('freesansbold.ttf', 50)
+    text = font.render('Solve', True, Colors.white, Colors.red)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 150, 150)
+
+    screen.blit(text, textRect)
+
+    text = font.render('Scramble', True, Colors.white, Colors.blue)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 150, 50)
+
+    screen.blit(text, textRect)
+
+    pygame.display.update()
+
+    pass
+
 pygame.init()
 
 gameDisplay = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -501,6 +550,7 @@ pygame.display.set_caption('Cubos')
 clock = pygame.time.Clock()
 
 crashed = False
+change = 0
 
 height = 3
 width = 3
@@ -512,24 +562,7 @@ Print_Cube_Array(cubes, height, width, length)
 
 Player_Mouse = Mouse()
 
-scrambling_moves = [Moves.Dp, Moves.F, Moves.F, Moves.Lp, Moves.U,Moves.Rp, Moves.F, Moves.F, Moves.L, Moves.Bp, Moves.R, Moves.R, Moves.D, Moves.D, Moves.R, Moves.R, Moves.Bp, Moves.L, Moves.D, Moves.D, Moves.B, Moves.B, Moves.Dp, Moves.F, Moves.F, Moves.R, Moves.R, Moves.Fp, Moves.D, Moves.B, Moves.Rp, Moves.Lp, Moves.U, Moves.U, Moves.F]
-#scrambling_moves = [Moves.Rp, Moves.U, Moves.U, Moves.B, Moves.Lp, Moves.Bp, Moves.U, Moves.U, Moves.L, Moves.L, Moves.U, Moves.D, Moves.Rp, Moves.B, Moves.D, Moves.D, Moves.U, Moves.U, Moves.Rp, Moves.Bp, Moves.U, Moves.U, Moves.L, Moves.L, Moves.B, Moves.B, Moves.Rp, Moves.L, Moves.Bp, Moves.F, Moves.F, Moves.L, Moves.L, Moves.R, Moves.B, Moves.B]
-
-for i in range(len(scrambling_moves)):
-    Move_Cubes(cubes, scrambling_moves[i])
-    Print_Cube_Array(cubes, height, width, length)
-    time.sleep(0.1)
-
-solve_chain = solver.GetSolveChain(cubes)
-
-time.sleep(2)
-
-for i in range(len(solve_chain)):
-    Move_Cubes(cubes, solve_chain[i])
-    Print_Cube_Array(cubes, height, width, length)
-    time.sleep(0.05)
-
-print("solved")
+Display_Menu(gameDisplay)
 
 while not crashed:
 
@@ -544,10 +577,16 @@ while not crashed:
         if event.type == pygame.MOUSEBUTTONUP:
             Player_Mouse.new_X = pygame.mouse.get_pos()[0]
             Player_Mouse.new_Y = pygame.mouse.get_pos()[1]
-            Handle_Mouse(Player_Mouse, cubes)
-            if(change):
-                Print_Cube_Array(cubes, height, width, length)
-                change = 0
+
+            if((Player_Mouse.new_X > (WIDTH - 270)) and (Player_Mouse.new_X < (WIDTH - 30)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
+                Create_Random_Scramble(cubes)
+            elif((Player_Mouse.new_X > (WIDTH - 220)) and (Player_Mouse.new_X < (WIDTH - 80)) and (Player_Mouse.new_Y > 125) and (Player_Mouse.new_Y < 175)):
+                Solve_Cube(cubes)
+            else:
+                Handle_Mouse(Player_Mouse, cubes)
+                if(change):
+                    Print_Cube_Array(cubes, height, width, length)
+                    change = 0
 
     pygame.display.update()
     clock.tick(30)
