@@ -3,6 +3,7 @@ import math
 import time
 import solver
 import random
+import kociemba
 
 class Colors:
     white = (255,255,255)
@@ -508,9 +509,9 @@ def Create_Random_Scramble(Cube):
 
     pass
 
-def Solve_Cube(Cube):
+def Solve_Pochmann(Cube):
 
-    print("Solving...")
+    print("Solving Using Pochmann...")
 
     solve_chain = solver.GetSolveChain(Cube)
 
@@ -526,7 +527,14 @@ def Solve_Cube(Cube):
 def Display_Menu(screen):
 
     font = pygame.font.Font('freesansbold.ttf', 50)
-    text = font.render('Solve', True, Colors.white, Colors.red)
+
+    text = font.render('Kociemba', True, Colors.white, Colors.green)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 150, 250)
+
+    screen.blit(text, textRect)
+
+    text = font.render('Pochmann', True, Colors.white, Colors.red)
     textRect = text.get_rect()
     textRect.center = (WIDTH - 150, 150)
 
@@ -539,6 +547,104 @@ def Display_Menu(screen):
     screen.blit(text, textRect)
 
     pygame.display.update()
+
+    pass
+
+def Color_to_Face_Kociemba(color):
+
+    switcher = {
+        Colors.white: "U",
+        Colors.yellow: "D",
+        Colors.green: "F",
+        Colors.blue: "B",
+        Colors.orange: "L",
+        Colors.red: "R",
+    }
+
+    return switcher.get(color, "")
+
+def Kociemba_Move_Translator(move):
+
+    switcher = {
+        "U": Moves.U,
+        "U'": Moves.Up,
+        "D": Moves.D,
+        "D'": Moves.Dp,
+        "F": Moves.F,
+        "F'": Moves.Fp,
+        "B": Moves.B,
+        "B'": Moves.Bp,
+        "R": Moves.R,
+        "R'": Moves.Rp,
+        "L": Moves.L,
+        "L'": Moves.Lp,
+    }
+
+    return switcher.get(move,"")
+
+def Solve_Kociemba(Cube):
+
+    print("Solving Using Kociemba...")
+
+    State_list = []
+    SolveChain = []
+
+    # U
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1][j][i].color_U))
+
+    # R
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1][-1 - j].color_R))
+
+    # F
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][j][-1].color_F))
+
+    # D
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[0][j][-1 - i].color_D))
+
+    # L
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][0][j].color_L))
+
+    # B
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1 - j][0].color_B))
+
+    # Concatenate all letters into one string
+    State_list = ''.join(State_list)
+
+    if(State_list != 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB'):
+        SolveChain_Kociemba = kociemba.solve(State_list)
+
+        print('Solving Chain: ', SolveChain_Kociemba)
+
+        SolveChain_Kociemba = SolveChain_Kociemba.split()
+
+        for i in range(len(SolveChain_Kociemba)):
+            if(SolveChain_Kociemba[i][-1] == '2'):
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i][0]))
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i][0]))
+            else:
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i]))
+
+    print("Total Moves of Solution: ", len(SolveChain))
+
+    # Perform Moves
+    for i in range(len(SolveChain)):
+        Move_Cubes(Cube, SolveChain[i])
+        Print_Cube_Array(Cube, len(Cube), len(Cube[0]), len(Cube[0][0]))
+        time.sleep(0.05)
+
+    print("Solved")
 
     pass
 
@@ -580,8 +686,10 @@ while not crashed:
 
             if((Player_Mouse.new_X > (WIDTH - 270)) and (Player_Mouse.new_X < (WIDTH - 30)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
                 Create_Random_Scramble(cubes)
-            elif((Player_Mouse.new_X > (WIDTH - 220)) and (Player_Mouse.new_X < (WIDTH - 80)) and (Player_Mouse.new_Y > 125) and (Player_Mouse.new_Y < 175)):
-                Solve_Cube(cubes)
+            elif((Player_Mouse.new_X > (WIDTH - 285)) and (Player_Mouse.new_X < (WIDTH - 15)) and (Player_Mouse.new_Y > 125) and (Player_Mouse.new_Y < 175)):
+                Solve_Pochmann(cubes)
+            elif((Player_Mouse.new_X > (WIDTH - 275)) and (Player_Mouse.new_X < (WIDTH - 25)) and (Player_Mouse.new_Y > 225) and (Player_Mouse.new_Y < 275)):
+                Solve_Kociemba(cubes)
             else:
                 Handle_Mouse(Player_Mouse, cubes)
                 if(change):
