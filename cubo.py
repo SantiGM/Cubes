@@ -48,6 +48,8 @@ HEIGHT = 600
 
 DEG_TO_RAD_30 = 30*math.pi/180
 
+Supported_Keys = [pygame.K_w, pygame.K_y, pygame.K_g, pygame.K_o, pygame.K_r, pygame.K_b]
+
 class Cube:
 
     def __init__(self,x,y,len,color_L,color_F,color_U,color_R,color_B,color_D):
@@ -524,27 +526,278 @@ def Solve_Pochmann(Cube):
 
     pass
 
+def Print_Layout(screen):
+
+    font = pygame.font.Font('freesansbold.ttf', 25)
+
+    # Down Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*2), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*3), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*4), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*2), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*3), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*4), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*2), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*3), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*4), 30, 30),  2)
+
+    text = font.render('Y', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*9) + 15, HEIGHT-(30*3) + 15)
+
+    screen.blit(text, textRect)
+
+
+    # Front Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*7), 30, 30),  2)
+
+    text = font.render('G', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*9) + 15, HEIGHT-(30*6) + 15)
+
+    screen.blit(text, textRect)
+
+
+    # Up Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*8), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*9), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*8), HEIGHT-(30*10), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*8), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*9), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*9), HEIGHT-(30*10), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*8), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*9), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*10), HEIGHT-(30*10), 30, 30),  2)
+
+    text = font.render('W', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*9) + 15, HEIGHT-(30*9) + 15)
+
+    screen.blit(text, textRect)
+    
+
+    # Left Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*11), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*11), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*11), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*12), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*12), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*12), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*13), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*13), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*13), HEIGHT-(30*7), 30, 30),  2)
+
+    text = font.render('O', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*12) + 15, HEIGHT-(30*6) + 15)
+
+    screen.blit(text, textRect)
+
+
+    # Right Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*7), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*7), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*7), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*6), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*6), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*6), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*5), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*5), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*5), HEIGHT-(30*7), 30, 30),  2)
+
+    text = font.render('R', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*6) + 15, HEIGHT-(30*6) + 15)
+
+    screen.blit(text, textRect)
+
+
+    # Back Face
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*4), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*4), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*4), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*3), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*3), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*3), HEIGHT-(30*7), 30, 30),  2)
+
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*2), HEIGHT-(30*5), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*2), HEIGHT-(30*6), 30, 30),  2)
+    pygame.draw.rect(screen, Colors.white, pygame.Rect(WIDTH - (30*2), HEIGHT-(30*7), 30, 30),  2)
+
+    text = font.render('B', True, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - (30*3) + 15, HEIGHT-(30*6) + 15)
+
+    screen.blit(text, textRect)
+
+    pass
+
+def Fill_Layout(screen, chain):
+
+    font = pygame.font.Font('freesansbold.ttf', 25)
+
+    j = 0
+
+    for i in range(54):
+
+        if j == 9:
+            j = 0
+
+        x = j % 3
+        y = j // 3
+
+        # Up Face
+        if (i < 9):
+
+            if(i < len(chain)):
+            
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(10 - x)) + 15, HEIGHT-(30*(10 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(10 - x)) + 2, HEIGHT-(30*(10 - y)) + 2, 28, 28))
+
+        # Left Face
+        elif (i < 18):
+
+            if(i < len(chain)):
+
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(13 - x)) + 15, HEIGHT-(30*(7 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(13 - x)) + 2, HEIGHT-(30*(7 - y)) + 2, 28, 28))
+
+        # Front Face
+        elif (i < 27):
+
+            if(i < len(chain)):
+
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(10 - x)) + 15, HEIGHT-(30*(7 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(10 - x)) + 2, HEIGHT-(30*(7 - y)) + 2, 28, 28))
+
+        # Right Face
+        elif (i < 36):
+
+            if(i < len(chain)):
+
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(7 - x)) + 15, HEIGHT-(30*(7 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(7 - x)) + 2, HEIGHT-(30*(7 - y)) + 2, 28, 28))
+
+        # Back Face
+        elif (i < 45):
+
+            if(i < len(chain)):
+
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(4 - x)) + 15, HEIGHT-(30*(7 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(4 - x)) + 2, HEIGHT-(30*(7 - y)) + 2, 28, 28))
+
+        # Down Face
+        else:
+
+            if(i < len(chain)):
+
+                text = font.render(chain[i], True, Colors.white)
+                textRect = text.get_rect()
+                textRect.center = (WIDTH - (30*(10 - x)) + 15, HEIGHT-(30*(4 - y)) + 15)
+
+                screen.blit(text, textRect)
+
+            else:
+
+                pygame.draw.rect(screen, Colors.black, pygame.Rect(WIDTH - (30*(10 - x)) + 2, HEIGHT-(30*(4 - y)) + 2, 28, 28))
+
+        j += 1
+
+        pygame.display.update()
+
+    pass
+
 def Display_Menu(screen):
 
     font = pygame.font.Font('freesansbold.ttf', 50)
 
     text = font.render('Kociemba', True, Colors.white, Colors.green)
     textRect = text.get_rect()
-    textRect.center = (WIDTH - 150, 250)
+    textRect.center = (WIDTH - 150, 50)
 
     screen.blit(text, textRect)
 
     text = font.render('Pochmann', True, Colors.white, Colors.red)
     textRect = text.get_rect()
-    textRect.center = (WIDTH - 150, 150)
+    textRect.center = (500, 50)
 
     screen.blit(text, textRect)
 
     text = font.render('Scramble', True, Colors.white, Colors.blue)
     textRect = text.get_rect()
-    textRect.center = (WIDTH - 150, 50)
+    textRect.center = (150, 50)
 
     screen.blit(text, textRect)
+
+    text = font.render('Input State:', True, Colors.white, Colors.orange)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 250, 200)
+
+    screen.blit(text, textRect)
+
+    font = pygame.font.Font('freesansbold.ttf', 25)
+
+    text = font.render('Done', True, Colors.black, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 125, 525)
+
+    screen.blit(text, textRect)
+
+    Print_Layout(screen)
 
     pygame.display.update()
 
@@ -648,10 +901,107 @@ def Solve_Kociemba(Cube):
 
     pass
 
+def Letter_to_Face(letter):
+
+    switcher = {
+        "w": "U",
+        "y": "D",
+        "g": "F",
+        "b": "B",
+        "o": "L",
+        "r": "R",
+    }
+
+    return switcher.get(letter, "")
+
+def Set_Cube_State(Cube, chain):
+
+    State_list_desired = []
+    State_list = []
+    SolveChain = []
+
+    # U
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1][j][i].color_U))
+
+    # R
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1][-1 - j].color_R))
+
+    # F
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][j][-1].color_F))
+
+    # D
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[0][j][-1 - i].color_D))
+
+    # L
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][0][j].color_L))
+
+    # B
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1 - j][0].color_B))
+
+    # Concatenate all letters into one string
+    State_list = ''.join(State_list)
+
+
+    for i in range (9):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+    for i in range (27, 36):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+    for i in range (18, 27):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+    for i in range (45, 54):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+    for i in range (9, 18):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+    for i in range (36, 45):
+        State_list_desired.append(Letter_to_Face(chain[i]))
+
+
+    # Concatenate all letters into one string
+    State_list_desired = ''.join(State_list_desired)
+
+    if(State_list != State_list_desired):
+        SolveChain_Kociemba = kociemba.solve(State_list, State_list_desired)
+
+        SolveChain_Kociemba = SolveChain_Kociemba.split()
+
+        for i in range(len(SolveChain_Kociemba)):
+            if(SolveChain_Kociemba[i][-1] == '2'):
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i][0]))
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i][0]))
+            else:
+                SolveChain.append(Kociemba_Move_Translator(SolveChain_Kociemba[i]))
+
+    print("Setting defined state")
+
+    # Perform Moves
+    for i in range(len(SolveChain)):
+        Move_Cubes(Cube, SolveChain[i])
+
+    Print_Cube_Array(Cube, len(Cube), len(Cube[0]), len(Cube[0][0]))
+
+    pass
+
 pygame.init()
 
 gameDisplay = pygame.display.set_mode((WIDTH,HEIGHT))
-pygame.display.set_caption('Cubos')
+pygame.display.set_caption('Rubiks Cube')
 
 clock = pygame.time.Clock()
 
@@ -667,6 +1017,8 @@ cubes = Create_Cube_grid(200, HEIGHT-150, 50, length, width, height, Colors.oran
 Print_Cube_Array(cubes, height, width, length)
 
 Player_Mouse = Mouse()
+
+user_text = []
 
 Display_Menu(gameDisplay)
 
@@ -684,17 +1036,36 @@ while not crashed:
             Player_Mouse.new_X = pygame.mouse.get_pos()[0]
             Player_Mouse.new_Y = pygame.mouse.get_pos()[1]
 
-            if((Player_Mouse.new_X > (WIDTH - 270)) and (Player_Mouse.new_X < (WIDTH - 30)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
+            if((Player_Mouse.new_X > (30)) and (Player_Mouse.new_X < (270)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
                 Create_Random_Scramble(cubes)
-            elif((Player_Mouse.new_X > (WIDTH - 285)) and (Player_Mouse.new_X < (WIDTH - 15)) and (Player_Mouse.new_Y > 125) and (Player_Mouse.new_Y < 175)):
+            elif((Player_Mouse.new_X > (365)) and (Player_Mouse.new_X < (635)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
                 Solve_Pochmann(cubes)
-            elif((Player_Mouse.new_X > (WIDTH - 275)) and (Player_Mouse.new_X < (WIDTH - 25)) and (Player_Mouse.new_Y > 225) and (Player_Mouse.new_Y < 275)):
+            elif((Player_Mouse.new_X > (725)) and (Player_Mouse.new_X < (975)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
                 Solve_Kociemba(cubes)
+            elif((Player_Mouse.new_X > (840)) and (Player_Mouse.new_X < (910)) and (Player_Mouse.new_Y > 512) and (Player_Mouse.new_Y < 537)):
+                if(len(user_text) == 54):
+                    Set_Cube_State(cubes, user_text)
             else:
                 Handle_Mouse(Player_Mouse, cubes)
                 if(change):
                     Print_Cube_Array(cubes, height, width, length)
                     change = 0
+
+        if event.type == pygame.KEYDOWN:
+            # Check for backspace 
+            if event.key == pygame.K_BACKSPACE: 
+  
+                # get text input from 0 to -1 i.e. end. 
+                user_text = user_text[:-1] 
+  
+            # Unicode standard is used for string 
+            # formation 
+            else:
+                if len(user_text) < 54:
+                    if event.key in Supported_Keys:
+                        user_text.append(event.unicode)
+
+            Fill_Layout(gameDisplay, user_text)
 
     pygame.display.update()
     clock.tick(30)
