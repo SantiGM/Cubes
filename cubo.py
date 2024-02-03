@@ -4,6 +4,7 @@ import time
 import solver
 import random
 import kociemba
+import serial
 
 class Colors:
     white = (255,255,255)
@@ -501,7 +502,7 @@ def Create_Random_Scramble(Cube):
 
     print("Scrambling...")
 
-    for i in range(50):
+    for i in range(40):
         random_list.append(random.randint(0, 11))
 
     for i in range(len(random_list)):
@@ -509,7 +510,7 @@ def Create_Random_Scramble(Cube):
         Print_Cube_Array(Cube, len(Cube), len(Cube[0]), len(Cube[0][0]))
         time.sleep(0.1)
 
-    pass
+    return random_list
 
 def Solve_Pochmann(Cube):
 
@@ -791,9 +792,21 @@ def Display_Menu(screen):
 
     font = pygame.font.Font('freesansbold.ttf', 25)
 
-    text = font.render('Done', True, Colors.black, Colors.white)
+    text = font.render('Set State', True, Colors.black, Colors.white)
     textRect = text.get_rect()
-    textRect.center = (WIDTH - 125, 525)
+    textRect.center = (WIDTH - 125, 345)
+
+    screen.blit(text, textRect)
+
+    text = font.render('Send Solution', True, Colors.black, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (WIDTH - 100, 525)
+
+    screen.blit(text, textRect)
+
+    text = font.render('Send Scramble', True, Colors.black, Colors.white)
+    textRect = text.get_rect()
+    textRect.center = (150, 100)
 
     screen.blit(text, textRect)
 
@@ -998,6 +1011,125 @@ def Set_Cube_State(Cube, chain):
 
     pass
 
+def Move_translator_reverse(move):
+
+    switcher = {
+        Moves.U: "U",
+        Moves.Up: "U'",
+        Moves.D: "D",
+        Moves.Dp: "D'",
+        Moves.F: "F",
+        Moves.Fp: "F'",
+        Moves.B: "B",
+        Moves.Bp: "B'",
+        Moves.R: "R",
+        Moves.Rp: "R'",
+        Moves.L: "L",
+        Moves.Lp: "L'",
+    }
+
+    return switcher.get(move,"")
+
+def Send_Serial_Solution(Cube):
+
+    State_list = []
+    SolveChain_serial = []
+
+    # U
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1][j][i].color_U))
+
+    # R
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1][-1 - j].color_R))
+
+    # F
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][j][-1].color_F))
+
+    # D
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[0][j][-1 - i].color_D))
+
+    # L
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][0][j].color_L))
+
+    # B
+    for i in range(3):
+        for j in range(3):
+            State_list.append(Color_to_Face_Kociemba(Cube[-1 - i][-1 - j][0].color_B))
+
+    # Concatenate all letters into one string
+    State_list = ''.join(State_list)
+
+    if(State_list != 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB'):
+        SolveChain_Kociemba = kociemba.solve(State_list)
+
+        print('Solving Chain: ', SolveChain_Kociemba)
+
+        SolveChain_Kociemba = SolveChain_Kociemba.split()
+
+        for i in range(len(SolveChain_Kociemba)):
+            if(SolveChain_Kociemba[i][-1] == '2'):
+                SolveChain_serial.append(SolveChain_Kociemba[i][0])
+                SolveChain_serial.append(SolveChain_Kociemba[i][0])
+            elif(SolveChain_Kociemba[i][-1] == "'"):
+                SolveChain_serial.append(SolveChain_Kociemba[i][0])
+                SolveChain_serial.append(SolveChain_Kociemba[i][1])
+            else:
+                SolveChain_serial.append(SolveChain_Kociemba[i])
+
+    print("Total Moves of Solution: ", len(SolveChain_serial))
+
+    SolveChain_serial = ''.join(SolveChain_serial)
+
+    # Send String
+    arduino = serial.Serial(port='COM4', baudrate=9600)
+
+    time.sleep(5)
+
+    SolveChain_serial = SolveChain_serial + '\n'
+    
+    arduino.write(SolveChain_serial.encode())
+
+    arduino.close()
+
+
+    print("String sent to serial device")
+
+    pass
+
+def Send_Scramble(scramble):
+
+    Scramble_serial = []
+
+    for i in range(len(scramble)):
+        Scramble_serial.append(Move_translator_reverse(scramble[i]))
+
+    Scramble_serial = ''.join(Scramble_serial)
+
+    Scramble_serial = Scramble_serial + '\n'
+
+    # Send String
+    arduino = serial.Serial(port='COM4', baudrate=9600)
+
+    time.sleep(5)
+    
+    arduino.write(Scramble_serial.encode())
+
+    arduino.close()
+
+
+    print("Scramble string sent to serial device")
+
+    pass
+
 pygame.init()
 
 gameDisplay = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -1020,6 +1152,8 @@ Player_Mouse = Mouse()
 
 user_text = []
 
+last_scramble = []
+
 Display_Menu(gameDisplay)
 
 while not crashed:
@@ -1037,14 +1171,18 @@ while not crashed:
             Player_Mouse.new_Y = pygame.mouse.get_pos()[1]
 
             if((Player_Mouse.new_X > (30)) and (Player_Mouse.new_X < (270)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
-                Create_Random_Scramble(cubes)
+                last_scramble = Create_Random_Scramble(cubes)
+            elif((Player_Mouse.new_X > (50)) and (Player_Mouse.new_X < (250)) and (Player_Mouse.new_Y > 85) and (Player_Mouse.new_Y < 115)):
+                Send_Scramble(last_scramble)  
             elif((Player_Mouse.new_X > (365)) and (Player_Mouse.new_X < (635)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
                 Solve_Pochmann(cubes)
-            elif((Player_Mouse.new_X > (725)) and (Player_Mouse.new_X < (975)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):
+            elif((Player_Mouse.new_X > (725)) and (Player_Mouse.new_X < (975)) and (Player_Mouse.new_Y > 25) and (Player_Mouse.new_Y < 75)):                
                 Solve_Kociemba(cubes)
-            elif((Player_Mouse.new_X > (840)) and (Player_Mouse.new_X < (910)) and (Player_Mouse.new_Y > 512) and (Player_Mouse.new_Y < 537)):
+            elif((Player_Mouse.new_X > (820)) and (Player_Mouse.new_X < (930)) and (Player_Mouse.new_Y > 332) and (Player_Mouse.new_Y < 357)):
                 if(len(user_text) == 54):
-                    Set_Cube_State(cubes, user_text)
+                    Set_Cube_State(cubes, user_text)                    
+            elif((Player_Mouse.new_X > (815)) and (Player_Mouse.new_X < (985)) and (Player_Mouse.new_Y > 512) and (Player_Mouse.new_Y < 537)):
+                    Send_Serial_Solution(cubes)
             else:
                 Handle_Mouse(Player_Mouse, cubes)
                 if(change):
